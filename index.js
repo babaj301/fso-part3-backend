@@ -50,4 +50,11 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const newPersons = persons.filter((p) => p.id !== id);
+
+  res.json(newPersons);
+});
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
