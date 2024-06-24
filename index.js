@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
+
 const port = 3001;
 
 const persons = [
@@ -52,9 +53,43 @@ app.get("/api/persons/:id", (req, res) => {
 
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  const newPersons = persons.filter((p) => p.id !== id);
+  persons = persons.filter((p) => p.id !== id);
 
-  res.json(newPersons);
+  res.json(persons);
+});
+
+const generateId = () => {
+  const maxId =
+    persons.length > 0 ? Math.max(...persons.map((n) => Number(n.id))) : 0;
+  return String(maxId + 1);
+};
+
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+
+  const exists = persons.find((p) => p.name === body.name);
+
+  if (exists) {
+    return res.status(403).json({ error: "name must be unique" });
+  }
+
+  if (!body.name) {
+    return res.status(400).json({ error: "name is missing" });
+  }
+
+  if (!body.number) {
+    return res.status(400).json({ error: "number is missing" });
+  }
+
+  const newPerson = {
+    name: body.name,
+    number: body.number,
+    id: generateId(),
+  };
+
+  persons = persons.concat(newPerson);
+
+  res.json(persons);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
