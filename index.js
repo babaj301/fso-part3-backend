@@ -11,8 +11,6 @@ app.use(
   morgan(":method :url :status :response-time ms - :res[content-length] :body")
 );
 
-const port = 3001;
-
 const persons = [
   {
     id: 1,
@@ -100,4 +98,5 @@ app.post("/api/persons", (req, res) => {
   res.json(persons);
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+const PORT = process.env.PORT || 3001;
+app.listen(port, () => console.log(`Example app listening on port ${PORT}!`));
