@@ -1,8 +1,10 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors());
 
 app.use(express.static("dist"));
 
@@ -13,7 +15,7 @@ app.use(
   morgan(":method :url :status :response-time ms - :res[content-length] :body")
 );
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: "Arto Hellas",
